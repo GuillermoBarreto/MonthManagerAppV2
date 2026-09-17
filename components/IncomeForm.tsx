@@ -11,13 +11,15 @@ export default function IncomeForm({ onAdd }: Props) {
 
   function submit(e: React.FormEvent) {
     e.preventDefault();
-    if (!amount || !category) return;
+    const value = Number(amount);
+    const trimmedCategory = category.trim();
+    if (!Number.isFinite(value) || value <= 0 || !trimmedCategory) return;
 
     onAdd({
       id: crypto.randomUUID(),
       type: "income",
-      amount: Number(amount),
-      category,
+      amount: value,
+      category: trimmedCategory,
       date: new Date().toISOString(),
     });
 
@@ -31,11 +33,17 @@ export default function IncomeForm({ onAdd }: Props) {
       <input
         placeholder="Amount"
         type="number"
+        min="0.01"
+        step="0.01"
+        required
+        aria-label="Income amount"
         value={amount}
         onChange={(e) => setAmount(e.target.value)}
       />
       <input
         placeholder="Category"
+        required
+        aria-label="Income category"
         value={category}
         onChange={(e) => setCategory(e.target.value)}
       />
