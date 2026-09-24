@@ -33,5 +33,11 @@ export function saveTransactions(
   }
 
   data[`${year}-${month}`] = transactions;
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  } catch (error) {
+    // Storage can be unavailable (private browsing) or full (quota exceeded);
+    // neither should crash the app.
+    console.error("Unable to save transactions.", error);
+  }
 }
