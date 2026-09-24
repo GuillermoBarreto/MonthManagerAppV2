@@ -1,10 +1,10 @@
 import { Transaction } from "../types/finance";
 
 interface Props {
-  transactions: Transaction[];
+  transactions?: Transaction[];
 }
 
-export default function Summary({ transactions }: Props) {
+export default function Summary({ transactions = [] }: Props) {
   const income = transactions
     .filter(t => t.type === "income")
     .reduce((s, t) => s + t.amount, 0);
