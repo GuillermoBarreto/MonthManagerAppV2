@@ -33,6 +33,7 @@ export default function IncomeForm({ onAdd }: Props) {
       <input
         placeholder="Amount"
         type="number"
+        inputMode="decimal"
         min="0.01"
         step="0.01"
         required
