@@ -2,6 +2,20 @@ import { Transaction } from "../types/finance";
 
 const STORAGE_KEY = "month-manager-data";
 
+function isTransaction(value: unknown): value is Transaction {
+  if (!value || typeof value !== "object") return false;
+  const transaction = value as Transaction;
+  return (
+    typeof transaction.id === "string" &&
+    (transaction.type === "income" || transaction.type === "expense") &&
+    typeof transaction.amount === "number" &&
+    Number.isFinite(transaction.amount) &&
+    transaction.amount > 0 &&
+    typeof transaction.category === "string" &&
+    typeof transaction.date === "string"
+  );
+}
+
 export function loadTransactions(
   month: number,
   year: number
@@ -11,7 +25,10 @@ export function loadTransactions(
 
   try {
     const data = JSON.parse(raw);
-    return data[`${year}-${month}`] || [];
+    const list = data[`${year}-${month}`];
+    // Stored data can be hand-edited or written by an older app version;
+    // drop malformed entries instead of rendering them.
+    return Array.isArray(list) ? list.filter(isTransaction) : [];
   } catch {
     // Corrupted storage data should not crash the app; start fresh.
     return [];
