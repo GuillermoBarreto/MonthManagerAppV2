@@ -43,7 +43,14 @@ export function saveTransactions(
   const raw = localStorage.getItem(STORAGE_KEY);
   let data: Record<string, Transaction[]> = {};
   try {
-    if (raw) data = JSON.parse(raw);
+    if (raw) {
+      const parsed: unknown = JSON.parse(raw);
+      // The stored value can be hand-edited to a non-object (e.g. "5");
+      // assigning a month key on it would throw, so reset in that case too.
+      if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+        data = parsed as Record<string, Transaction[]>;
+      }
+    }
   } catch {
     // Corrupted storage data is replaced with a fresh store.
     data = {};
