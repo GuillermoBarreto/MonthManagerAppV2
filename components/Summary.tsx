@@ -23,11 +23,22 @@ export default function Summary({ transactions = [] }: Props) {
   const balance = income - expenses;
 
   return (
-    <div>
+    <section aria-label="Monthly summary">
       <h2>Summary</h2>
-      <p>Total Income: {usd.format(income)}</p>
-      <p>Total Expenses: {usd.format(expenses)}</p>
-      <p>Balance: {usd.format(balance)}</p>
-    </div>
+      <dl>
+        <div>
+          <dt>Total income</dt>
+          <dd>{usd.format(income)}</dd>
+        </div>
+        <div>
+          <dt>Total expenses</dt>
+          <dd>{usd.format(expenses)}</dd>
+        </div>
+        <div>
+          <dt>Balance</dt>
+          <dd>{usd.format(balance)}</dd>
+        </div>
+      </dl>
+    </section>
   );
 }
