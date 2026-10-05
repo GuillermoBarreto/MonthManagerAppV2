@@ -4,6 +4,13 @@ interface Props {
   transactions?: Transaction[];
 }
 
+// Intl.NumberFormat handles grouping, rounding, and the currency symbol;
+// toFixed(2) alone can't do any of that.
+const usd = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD",
+});
+
 export default function Summary({ transactions = [] }: Props) {
   const income = transactions
     .filter(t => t.type === "income")
@@ -15,13 +22,12 @@ export default function Summary({ transactions = [] }: Props) {
 
   const balance = income - expenses;
 
-  // toFixed(2) keeps floating-point sums like 0.1 + 0.2 from showing as 0.30000000000000004.
   return (
     <div>
       <h2>Summary</h2>
-      <p>Total Income: ${income.toFixed(2)}</p>
-      <p>Total Expenses: ${expenses.toFixed(2)}</p>
-      <p>Balance: ${balance.toFixed(2)}</p>
+      <p>Total Income: {usd.format(income)}</p>
+      <p>Total Expenses: {usd.format(expenses)}</p>
+      <p>Balance: {usd.format(balance)}</p>
     </div>
   );
 }
