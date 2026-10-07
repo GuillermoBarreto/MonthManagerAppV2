@@ -1,4 +1,5 @@
 import { Transaction } from "../types/finance";
+import { usd } from "../utils/format";
 
 interface Props {
   items: Transaction[];
@@ -11,8 +12,13 @@ export default function IncomeList({ items, onDelete }: Props) {
       <h3>Income</h3>
       {items.map((t) => (
         <div key={t.id}>
-          {t.category}: ${t.amount}
-          <button onClick={() => onDelete(t.id)}>X</button>
+          {t.category}: {usd.format(t.amount)}
+          <button
+            onClick={() => onDelete(t.id)}
+            aria-label={`Delete ${label}: ${t.category} ${usd.format(t.amount)}`}
+          >
+            X
+          </button>
         </div>
       ))}
     </div>
