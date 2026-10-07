@@ -20,7 +20,14 @@ export function loadTransactions(
   month: number,
   year: number
 ): Transaction[] {
-  const raw = localStorage.getItem(STORAGE_KEY);
+  let raw: string | null;
+  try {
+    raw = localStorage.getItem(STORAGE_KEY);
+  } catch {
+    // localStorage itself can throw (e.g. SecurityError in private browsing);
+    // treat it as empty storage instead of crashing the app.
+    return [];
+  }
   if (!raw) return [];
 
   try {
