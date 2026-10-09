@@ -47,7 +47,17 @@ export function saveTransactions(
   year: number,
   transactions: Transaction[]
 ) {
-  const raw = localStorage.getItem(STORAGE_KEY);
+  let raw: string | null;
+  try {
+    raw = localStorage.getItem(STORAGE_KEY);
+  } catch (error) {
+    // Same failure mode as in loadTransactions (e.g. SecurityError in private
+    // browsing). Without a readable store we cannot merge safely, so skip the
+    // write instead of clobbering other months or crashing the app.
+    console.error("Unable to read transactions for save.", error);
+    return;
+  }
+
   let data: Record<string, Transaction[]> = {};
   try {
     if (raw) {
