@@ -15,7 +15,7 @@ export default function ExpenseList({ items, onDelete }: Props) {
           {t.category}: {usd.format(t.amount)}
           <button
             onClick={() => onDelete(t.id)}
-            aria-label={`Delete ${label}: ${t.category} ${usd.format(t.amount)}`}
+            aria-label={`Delete expense: ${t.category} ${usd.format(t.amount)}`}
           >
             X
           </button>
